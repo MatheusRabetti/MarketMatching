@@ -1,4 +1,4 @@
-#' @title Market Matching and Causal Impact Inference
+#' @title Market matching and causal impact inference
 #'
 #' @details  
 #' The MarketMatching package can be used to perform the following analyses:
@@ -26,42 +26,39 @@
 #' For a given test market find the best matching control markets using time series matching and analyze the impact of an intervention.
 #' The intervention could be be a marketing event or some other local business tactic that is being tested. 
 #' The package utilizes dynamic time warping to do the matching and the CausalImpact package to analyze the causal impact. 
-#' In fact, MarketMatching is simply a wrapper and worfflow for those two packages. 
+#' In fact, MarketMatching can be considered a wrapper for those two packages. 
 #' MarketMatching does not provide any functionality that cannot be found in these packages 
 #' but simplifies the workflow of using dtw and CausalImpact together 
 #' and provides charts and data that are easy to manipulate.
 #'
 #'
 #' @name MarketMatching
-#' @examples
-#' 
+#' @examples 
 #' ##-----------------------------------------------------------------------
-#' ## Find best matches for CPH
-#' ## If we leave test_market as NULL, best matches are found for all markets
+#' ## Find best matches for each airport time series
 #' ##-----------------------------------------------------------------------
 #' library(MarketMatching)
 #' data(weather, package="MarketMatching")
-#' mm <- best_matches(data=weather, 
-#'                    id="Area",
+#' mm <- best_matches(data=weather, id="Area",
 #'                    date_variable="Date",
 #'                    matching_variable="Mean_TemperatureF",
 #'                    parallel=FALSE,
-#'                    markets_to_be_matched="CPH",
 #'                    warping_limit=1, # warping limit=1
 #'                    dtw_emphasis=1, # rely only on dtw for pre-screening
 #'                    matches=5, # request 5 matches
 #'                    start_match_period="2014-01-01",
 #'                    end_match_period="2014-10-01")
 #' head(mm$Distances)
+#' subset(mm$Distances, Area=="CPH")
 #' 
 #' ##-----------------------------------------------------------------------
 #' ## Analyze causal impact of a made-up weather intervention in Copenhagen
 #' ## Since this is weather data it is a not a very meaningful example. 
-#' ## This is merely to demonstrate the functionality.
+#' ## This is merely to demonstrate the function.
 #' ##-----------------------------------------------------------------------
+#' library(CausalImpact)
 #' results <- MarketMatching::inference(matched_markets = mm, 
 #'                                      test_market = "CPH", 
-#'                                      analyze_betas=FALSE,
 #'                                      end_post_period = "2015-10-01", 
 #'                                      prior_level_sd = 0.002)
 #' 
